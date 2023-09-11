@@ -18,7 +18,7 @@ const Navbar = () => {
                   <circle cx="11" cy="11" r="8" />
                 </svg>
               </span>
-              <input className="bg-gray-700 text-white rounded-md py-2 pl-10 pr-4 focus:outline-none focus:bg-white focus:text-gray-900" type="text" placeholder="Search" />
+              <input className="bg-gray-700 text-white rounded-md py-2 pl-10 pr-20 focus:outline-none focus:bg-white focus:text-gray-900" type="text" placeholder="Search" />
             </div>
           </div>
           <div className="flex">
