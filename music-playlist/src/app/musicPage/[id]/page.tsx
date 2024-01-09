@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 
 interface MusicPageProps {
   params: {
-    id: string; // Replace with the actual type of your 'id' property
+    id: string; 
   };
 }
 
