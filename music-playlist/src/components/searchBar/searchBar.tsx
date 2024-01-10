@@ -1,4 +1,3 @@
-// SpotifySearchBar.tsx
 import React, { useState, useEffect, ChangeEvent } from "react";
 import MusicPlayerBar from "../musicPlayerBar/musicPlayerBar";
 import { FaSpotify } from "react-icons/fa";
@@ -29,7 +28,8 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [fetchError, setFetchError] = useState<boolean>(false);
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
 
   useEffect(() => {
     const getClientCredentialsToken = async () => {
@@ -97,11 +97,15 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    setFetchError(false); // Reset fetch error when the input changes
-    // Clear selected track and preview URL when the input is empty
+
+    // Clear selected track, preview URL, and stop playing when the input is empty
     if (e.target.value.trim() === "") {
       setSelectedTrack(null);
       setPreviewUrl(null);
+
+      // Clear the alert message when the input is empty
+      setAlertMessage("");
+      setAlertOpen(false);
     }
   };
 
@@ -109,6 +113,10 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
     setQuery("");
     setSelectedTrack(null);
     setPreviewUrl(null);
+
+    // Clear the alert message and close the alert when the user clears the search
+    setAlertMessage("");
+    setAlertOpen(false);
   };
 
   const handleTrackClick = async (track: Track) => {
@@ -125,28 +133,57 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
         const trackPreviewUrl = data.preview_url;
 
         if (trackPreviewUrl) {
+          // Clear the alert message when there is a preview URL
+          setAlertMessage("");
+          setAlertOpen(false);
+
           setSelectedTrack(track);
           updateTitle(track.name);
           setPreviewUrl(trackPreviewUrl);
         } else {
-          console.error("Track does not have a preview URL");
-          setFetchError(true);
+          setAlertMessage("This track may not have a preview.");
+          setAlertOpen(true);
+
+          // If no preview URL, clear selected track, preview URL, and stop playing
+          setSelectedTrack(null);
+          setPreviewUrl(null);
         }
       } else {
-        console.error("Failed to get track details from Spotify");
-        setFetchError(true);
+        setAlertMessage("Failed to get track details from Spotify.");
+        setAlertOpen(true);
+
+        // If failed to get track details, clear selected track, preview URL, and stop playing
+        setSelectedTrack(null);
+        setPreviewUrl(null);
       }
     } catch (error) {
-      console.error("Error fetching track details from Spotify:", error);
-      setFetchError(true);
+      setAlertMessage("Error fetching track details from Spotify.");
+      setAlertOpen(true);
+
+      // If there's an error, clear selected track, preview URL, and stop playing
+      setSelectedTrack(null);
+      setPreviewUrl(null);
     }
+  };
+
+  const handleMusicStop = () => {
+    setSelectedTrack(null);
+    setPreviewUrl(null);
   };
 
   return (
     <div className="container mx-auto my-8 rounded p-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg">
+      {alertOpen && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative" role="alert" style={{ top: '-0.5rem', maxWidth: '328px' }}>
+          <strong className="font-bold">Alert! </strong>
+          <span className="block sm:inline">{alertMessage}</span>
+        </div>
+      )}
+
       <label className="text-2xl font-bold mb-2">
         <FaSpotify className="inline mr-1 mt-0" style={{ fontSize: '1.5em' }} /> Search on Spotify
       </label>
+
       <div className="relative">
         <input
           placeholder="Search for a track"
@@ -160,15 +197,10 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
             className="absolute right-2.5 top-7 text-white cursor-pointer"
             onClick={clearSearch}
           >
-            <ImCancelCircle size="1.3em" />
+            <ImCancelCircle size="1.4em" />
           </button>
         )}
       </div>
-      {fetchError && (
-        <div className="text-red-500 mt-2">
-          This track may not have a preview URL.
-        </div>
-      )}
       <div className="grid grid-cols-4 gap-4 mt-4">
         {searchResults.slice(0, 4).map((track) => (
           <div
@@ -189,7 +221,14 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
           </div>
         ))}
       </div>
-      {previewUrl && <MusicPlayerBar track={selectedTrack} previewUrl={previewUrl} />}
+
+      {previewUrl && selectedTrack && (
+        <MusicPlayerBar
+          track={selectedTrack}
+          previewUrl={previewUrl}
+          onStop={handleMusicStop}
+        />
+      )}
     </div>
   );
 };
