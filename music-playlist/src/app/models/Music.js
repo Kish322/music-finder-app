@@ -8,11 +8,11 @@ mongoose.Promise = global.Promise;
 const musicSchema = new Schema(
   {
     title: String,
-    description: String,
-    category: String,
-    priority: Number,
-    progress: Number,
-    status: String,
+    notes: String,
+    artist: String,
+    album: String,
+    genre: String,
+    favorites: Number,
     active: Boolean,
   },
   {

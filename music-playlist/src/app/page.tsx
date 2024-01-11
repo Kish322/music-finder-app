@@ -1,7 +1,7 @@
 "use client";
 require('dotenv').config();
 import React, { useEffect, useState } from 'react';
-import Card from '@/components/card/card';
+import Card from '@/app/components/card/card';
 
 interface MusicPlaylist {
   id: number;

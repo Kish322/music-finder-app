@@ -20,9 +20,12 @@ interface Track {
 
 interface SpotifySearchBarProps {
   updateTitle: (newTitle: string) => void;
+  updateArtist: (newArtist: string) => void;
+  updateAlbum: (newAlbum: string) => void;
+  updateGenre: (newGenre: string) => void;
 }
 
-const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
+const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, updateArtist, updateAlbum, updateGenre }) => {
   const [query, setQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Track[]>([]);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -132,20 +135,37 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle }) => {
         const data = await response.json();
         const trackPreviewUrl = data.preview_url;
 
-        if (trackPreviewUrl) {
-          // Clear the alert message when there is a preview URL
-          setAlertMessage("");
-          setAlertOpen(false);
+        // Clear the alert message when there is a preview URL
+        setAlertMessage("");
+        setAlertOpen(false);
 
-          setSelectedTrack(track);
-          updateTitle(track.name);
+        setSelectedTrack(track);
+        updateTitle(track.name);
+        updateArtist(track.artists.map(artist => artist.name).join(', '));
+        updateAlbum(track.album.name);
+
+        // Fetch genres of the artist using the artist ID
+        const artistId = data.artists[0].id;
+        const artistResponse = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (artistResponse.ok) {
+          const artistData = await artistResponse.json();
+          const artistGenres = artistData.genres;
+          updateGenre(artistGenres.join(', '));
+        }
+
+        if (trackPreviewUrl) {
           setPreviewUrl(trackPreviewUrl);
         } else {
           setAlertMessage("This track may not have a preview.");
           setAlertOpen(true);
 
-          // If no preview URL, clear selected track, preview URL, and stop playing
-          setSelectedTrack(null);
+          // If no preview URL, clear preview URL but keep the selected track details
           setPreviewUrl(null);
         }
       } else {

@@ -1,4 +1,4 @@
-import MusicForm from '@/components/form/form';
+import MusicForm from '@/app/components/form/form';
 import { NextPage } from 'next';
 
 interface MusicPageProps {
