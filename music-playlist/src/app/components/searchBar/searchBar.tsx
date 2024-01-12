@@ -2,6 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from "react";
 import MusicPlayerBar from "../musicPlayerBar/musicPlayerBar";
 import { FaSpotify } from "react-icons/fa";
 import { ImCancelCircle } from "react-icons/im";
+import { IoIosSearch } from "react-icons/io";
 require('dotenv').config();
 
 interface Artist {
@@ -25,7 +26,12 @@ interface SpotifySearchBarProps {
   updateGenre: (newGenre: string) => void;
 }
 
-const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, updateArtist, updateAlbum, updateGenre }) => {
+const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({
+  updateTitle,
+  updateArtist,
+  updateAlbum,
+  updateGenre,
+}) => {
   const [query, setQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Track[]>([]);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -64,7 +70,7 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, update
     };
 
     getClientCredentialsToken();
-  }, []); // Run once on mount
+  }, []); 
 
   useEffect(() => {
     const searchSpotify = async () => {
@@ -141,7 +147,7 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, update
 
         setSelectedTrack(track);
         updateTitle(track.name);
-        updateArtist(track.artists.map(artist => artist.name).join(', '));
+        updateArtist(track.artists.map((artist) => artist.name).join(", "));
         updateAlbum(track.album.name);
 
         // Fetch genres of the artist using the artist ID
@@ -156,7 +162,7 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, update
         if (artistResponse.ok) {
           const artistData = await artistResponse.json();
           const artistGenres = artistData.genres;
-          updateGenre(artistGenres.join(', '));
+          updateGenre(artistGenres.join(", "));
         }
 
         if (trackPreviewUrl) {
@@ -194,22 +200,27 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, update
   return (
     <div className="container mx-auto my-8 rounded p-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg">
       {alertOpen && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative" role="alert" style={{ top: '-0.5rem', maxWidth: '328px' }}>
+        <div
+          className="bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative"
+          role="alert"
+          style={{ top: "-0.5rem", maxWidth: "328px" }}
+        >
           <strong className="font-bold">Alert! </strong>
           <span className="block sm:inline">{alertMessage}</span>
         </div>
       )}
 
       <label className="text-2xl font-bold mb-2">
-        <FaSpotify className="inline mr-1 mt-0" style={{ fontSize: '1.5em' }} /> Search on Spotify
+        <FaSpotify className="inline mr-1 mt-0" style={{ fontSize: "1.5em" }} /> Search on Spotify
       </label>
 
       <div className="relative">
+        <IoIosSearch className="absolute left-3 top-9 transform -translate-y-1/2 text-white" size="1.7em" />
         <input
           placeholder="Search for a track"
           value={query}
           onChange={handleInputChange}
-          className="w-full p-3 border-2 border-solid border-white-800 rounded focus:outline-none bg-transparent mt-3"
+          className="w-full p-3 pl-10 border-2 border-solid border-white-800 rounded focus:outline-none bg-transparent mt-3"
           style={{ color: "white" }}
         />
         {query && (
@@ -235,7 +246,7 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, update
               className="w-full h-auto rounded"
             />
             <div className="mt-2 text-center text-white">
-              <p className="mb-1">Artist: {track.artists.map(artist => artist.name).join(', ')}</p>
+              <p className="mb-1">Artist: {track.artists.map((artist) => artist.name).join(", ")}</p>
               <p>Album: {track.album.name}</p>
             </div>
           </div>
@@ -243,11 +254,7 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({ updateTitle, update
       </div>
 
       {previewUrl && selectedTrack && (
-        <MusicPlayerBar
-          track={selectedTrack}
-          previewUrl={previewUrl}
-          onStop={handleMusicStop}
-        />
+        <MusicPlayerBar track={selectedTrack} previewUrl={previewUrl} onStop={handleMusicStop} />
       )}
     </div>
   );

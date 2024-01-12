@@ -19,6 +19,17 @@ interface MusicFormData {
 
 const MusicForm: React.FC = () => {
   const router = useRouter();
+  const [formData, setFormData] = useState<MusicFormData>({
+    title: "",
+    artist: "",
+    album: "",
+    notes: "",
+    favorites: 1,
+    genre: "",
+  });
+  const [fireIconColors, setFireIconColors] = useState([true, false, false, false, false]);
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const value = e.target.value;
@@ -30,8 +41,26 @@ const MusicForm: React.FC = () => {
     }));
   };
 
+  const handleFavoritesClick = (value: number) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      favorites: value,
+    }));
+
+    setFireIconColors((prevColors) =>
+      prevColors.map((_, index) => index <= value - 1)
+    );
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Check if track, album, and artist are all empty
+    if (formData.title.trim() === "" && formData.artist.trim() === "" && formData.album.trim() === "") {
+      setAlertMessage("Please fill out the Track, Artist, and Album fields using the Spotify Search.");
+      setAlertOpen(true);
+      return;
+    }
 
     try {
       const res = await fetch("/api/Music", {
@@ -51,29 +80,6 @@ const MusicForm: React.FC = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-  const startingMusicData: MusicFormData = {
-    title: "",
-    artist: "",
-    album: "",
-    notes: "",
-    favorites: 1,
-    genre: "",
-  };
-
-  const [formData, setFormData] = useState<MusicFormData>(startingMusicData);
-  const [fireIconColors, setFireIconColors] = useState([true, false, false, false, false]);
-
-  const handleFavoritesClick = (value: number) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      favorites: value,
-    }));
-
-    setFireIconColors((prevColors) =>
-      prevColors.map((_, index) => index <= value - 1)
-    );
   };
 
   return (
@@ -98,11 +104,10 @@ const MusicForm: React.FC = () => {
           name="title"
           type="text"
           placeholder="track"
+          readOnly
           onChange={handleChange}
-          required={true}
           value={formData.title}
           style={{
-            wordWrap: 'break-word',
             width: '100%',
             background: 'linear-gradient(to right, #802b78, #bd6755)', 
             border: '1px solid #ccc',
@@ -118,11 +123,10 @@ const MusicForm: React.FC = () => {
           name="artist"
           type="text"
           placeholder="artist"
+          readOnly
           onChange={handleChange}
-          required={true}
           value={formData.artist}
           style={{
-            wordWrap: 'break-word',
             width: '100%',
             background: 'linear-gradient(to right, #802b78, #bd6755)', 
             border: '1px solid #ccc',
@@ -138,11 +142,10 @@ const MusicForm: React.FC = () => {
           name="album"
           type="text"
           placeholder="album"
+          readOnly
           onChange={handleChange}
-          required={true}
           value={formData.album}
           style={{
-            wordWrap: 'break-word',
             width: '100%',
             background: 'linear-gradient(to right, #802b78, #bd6755)', 
             border: '1px solid #ccc',
@@ -162,7 +165,6 @@ const MusicForm: React.FC = () => {
           required={true}
           value={formData.genre}
           style={{
-            wordWrap: 'break-word',
             width: '100%',
             background: 'linear-gradient(to right, #802b78, #bd6755)',
             border: '1px solid #ccc',
@@ -182,7 +184,6 @@ const MusicForm: React.FC = () => {
           value={formData.notes}
           rows={5}
           style={{
-            wordWrap: 'break-word',
             width: '100%',
             background: 'linear-gradient(to right, #802b78, #bd6755)', 
             border: '1px solid #ccc',
@@ -214,6 +215,22 @@ const MusicForm: React.FC = () => {
             style={{ width: '275px', marginTop: '20px' }} 
           />
         </div>
+        {alertOpen && formData.title.trim() === "" && formData.artist.trim() === "" && formData.album.trim() === "" && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-2 py-1 rounded relative mt-4"
+            role="alert"
+            style={{
+              top: "-1%", 
+              left: '50%',
+              transform: 'translateX(-50%)', 
+              maxWidth: "3200px",
+              position: 'relative', 
+            }}
+          >
+            <strong className="font-bold">Alert! </strong>
+            <span className="block sm:inline">{alertMessage}</span>
+          </div>
+        )}
       </form>
     </div>
   );
