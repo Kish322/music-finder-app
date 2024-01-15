@@ -211,7 +211,7 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({
       )}
 
       <label className="text-2xl font-bold mb-2">
-        <FaSpotify className="inline mr-1 mt-0" style={{ fontSize: "1.5em" }} /> Search on Spotify
+        <FaSpotify className="inline mr-1 mb-1" style={{ fontSize: "1.5em" }} /> Search on Spotify
       </label>
 
       <div className="relative">

@@ -1,18 +1,16 @@
 "use client";
-require('dotenv').config();
 import React, { useEffect, useState } from 'react';
 import Card from '@/app/components/card/card';
 
 interface MusicPlaylist {
   id: number;
-  category: string;
-  priority: number;
+  genre: string;
+  favorites: number;
   title: string;
-  description: string;
+  notes: string;
   createdAt: number;
-  progress: number;
-  status: string;
-  // Add more properties as needed
+  artist: string;
+  album: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -43,21 +41,29 @@ const Dashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const uniqueCategories = Array.from(new Set(musicPlaylists?.map(({ category }) => category)) || []);
+  const extractFirstGenre = (fullGenre: string): string => {
+    const parts = fullGenre.split(', ');
+    return parts[0];
+  };
+
+  const uniqueGenres = Array.from(new Set(musicPlaylists?.map(({ genre }) => extractFirstGenre(genre))) || []).sort();
 
   return (
     <div className="p-5">
+      <h1 className="text-center text-2xl font-bold mb-4" style={{ fontFamily: 'Rock Salt', fontSize: '35px', color: 'green' }}>My Music Collection</h1>
       <div>
-        {musicPlaylists && uniqueCategories?.map((uniqueCategory, categoryIndex) => (
-          <div key={categoryIndex} className="mb-4">
-            <h2>{uniqueCategory}</h2>
+        {musicPlaylists && uniqueGenres?.map((uniqueGenre, genreIndex) => (
+          <div key={genreIndex} className="mb-4">
+            <h2 style={{ fontFamily: 'Rock Salt', fontSize: '30px', color: 'orange' }}>{uniqueGenre}</h2>
             <div className="lg:grid grid-cols-2 xl:grid-cols-4">
-              {musicPlaylists.filter((musicPlaylist) => musicPlaylist.category === uniqueCategory).map((filteredMusicPlaylist, index) => (
-                <Card
-                  key={index}
-                  MusicPlaylist={filteredMusicPlaylist}
-                />
-              ))}
+              {musicPlaylists
+                .filter((musicPlaylist) => extractFirstGenre(musicPlaylist.genre) === uniqueGenre)
+                .map((filteredMusicPlaylist, index) => (
+                  <Card
+                    key={index}
+                    MusicPlaylist={filteredMusicPlaylist}
+                  />
+                ))}
             </div>
           </div>
         ))}

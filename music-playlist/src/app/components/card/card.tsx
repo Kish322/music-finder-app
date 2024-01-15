@@ -1,19 +1,16 @@
-import React from "react";
-import PriorityDisplay from "../priorityDisplay/priorityDisplay";
-import ProgressDisplay from "../progressDisplay/progressDisplay";
-import StatusDisplay from "../statusDisplay/statusDisplay";
+import React, { useState, useEffect } from "react";
+import FavouritesDisplay from "../favoritesDisplay/favoritesDisplay";
 import DeleteCard from "../deleteCard/deleteCard";
 
 interface MusicPlaylist {
-  priority: number;
   id: number;
-  category: string;
+  genre: string;
   title: string;
-  description: string;
+  notes: string;
+  favorites: number;
   createdAt: number;
-  progress: number;
-  status: string;
-  // Add more properties as needed
+  artist: string;
+  album: string;
 }
 
 interface CardProps {
@@ -21,28 +18,95 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
-    return (
-        <div className="flex flex-col bg-card hover:bg-card-hover rounded-md shadow-lg p-3 m-2">
-          <div className="flex mb-3">
-            <PriorityDisplay priority={MusicPlaylist.priority} />
-            <div className="ml-auto"></div>
-            <DeleteCard />
-          </div>
-          <h4>{MusicPlaylist.title}</h4>
-          <hr className="h-px border-0 bg-page mb-2" />
-          <p className="whitespace-pre-wrap">{MusicPlaylist.description}</p>
-          <div className="flex-grow"></div>
-          <div className="flex mt-2">
-            <div className="flex flex-col">
-              <p className="text-xs my-1">{MusicPlaylist.createdAt}</p>
-              <ProgressDisplay progress={MusicPlaylist.progress} />
-            </div>
-            <div className="ml-auto flex items-end">
-              <StatusDisplay status={MusicPlaylist.status} />
-            </div>
-          </div>
-        </div>
-      );
+  const [albumInfo, setAlbumInfo] = useState<{ name: string; imageUrl: string } | null>(null);
+
+  useEffect(() => {
+    const fetchAlbumInfo = async () => {
+      try {
+        const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+        const clientSecret = process.env.NEXT_PUBLIC_CLIENT_SECRET;
+
+        const basicAuthToken = btoa(`${clientId}:${clientSecret}`);
+
+        const response = await fetch(`https://accounts.spotify.com/api/token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${basicAuthToken}`,
+          },
+          body: "grant_type=client_credentials",
+        });
+
+        const data = await response.json();
+        const accessToken = data.access_token;
+
+        const trackResponse = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(MusicPlaylist.title)}&type=track`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const trackData = await trackResponse.json();
+        if (trackData.tracks?.items.length > 0) {
+          const albumName = trackData.tracks.items[0].album.name;
+          const imageUrl = trackData.tracks.items[0].album.images[0]?.url; // Assuming the first image in the array is the album cover
+          setAlbumInfo({ name: albumName, imageUrl });
+        }
+      } catch (error) {
+        console.error("Error fetching album information from Spotify API:", error);
+      }
     };
+
+    fetchAlbumInfo();
+  }, [MusicPlaylist.title]);
+
+  return (
+    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white flex flex-col hover:bg-card-hover rounded-md shadow-lg p-3 m-4">
+      <div className="flex mb-2">
+        <FavouritesDisplay favourites={MusicPlaylist.favorites} />
+        <div className="ml-auto"></div>
+        <DeleteCard />
+      </div>
+      <h3 className="text-center" style={{ fontFamily: "Permanent Marker", fontSize: "27px" }}>
+        {MusicPlaylist.title}
+      </h3>
+      {albumInfo && (
+        <img
+          src={albumInfo.imageUrl}
+          alt={albumInfo.name}
+          className="mx-auto w-full h-auto mb-2"
+          style={{ maxWidth: "220px", maxHeight: "150px" }}
+        />
+      )}
+      <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
+        Album: {MusicPlaylist.album}
+      </p>
+      <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
+        Artist: {MusicPlaylist.artist}
+      </p>
+      <hr className="my-2 h-0.5 border-0 bg-page" />
+      <p className="whitespace-pre-wrap" style={{ fontFamily: "Salsa", fontSize: "17px" }}>
+        Notes: {MusicPlaylist.notes}
+      </p>
+      <div className="flex-grow"></div>
+      <div className="flex mt-2">
+        <div className="flex flex-col">
+          <p className="text-xs transform translate-y-3">
+            Created: {' '}
+            {new Date(MusicPlaylist.createdAt).toLocaleString('en-US', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            })}
+          </p>
+        </div>
+        <div className="ml-auto flex items-end"></div>
+      </div>
+    </div>
+  );
+};
 
 export default Card;

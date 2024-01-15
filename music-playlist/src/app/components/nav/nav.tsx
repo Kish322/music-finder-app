@@ -10,7 +10,7 @@ const Nav = () => {
           <div className="logo-container h-7">
             <img
               src="/piano.png"
-              alt="Mystique company"
+              alt="Mystique"
               className="h-12 object-contain transform -translate-y-3"
             />
           </div>

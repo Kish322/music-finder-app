@@ -1,12 +1,11 @@
 import React from "react";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaTimes } from "react-icons/fa";
 
 const DeleteCard: React.FC = () => {
   return (
-    <FontAwesomeIcon
-      icon={faTimes}
+    <FaTimes
       className="text-red-400 hover:cursor-pointer hover:text-red-200"
+      size={22}
     />
   );
 };
