@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
 
-// Connect to MongoDB using the MONGODB_URI from environment variables
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.Promise = global.Promise;
 
@@ -16,12 +15,10 @@ const musicSchema = new Schema(
     active: Boolean,
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true, 
   }
 );
 
-// Define the Music model using the schema
 const Music = mongoose.models.Music || mongoose.model("Music", musicSchema);
 
-// Export the Music model
 export default Music;

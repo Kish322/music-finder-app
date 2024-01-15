@@ -6,13 +6,17 @@ interface FavouritesDisplayProps {
 }
 
 const FavouritesDisplay: React.FC<FavouritesDisplayProps> = ({ favourites }) => {
+  const maxFavourites = 5; 
+
   return (
     <div className="flex justify-start align-baseline">
-      <FaFire className={`pr-1 ${favourites > 0 ? "text-red-400" : "text-slate-400"}`} size={22} />
-      <FaFire className={`pr-1 ${favourites > 1 ? "text-red-400" : "text-slate-400"}`} size={22}/>
-      <FaFire className={`pr-1 ${favourites > 2 ? "text-red-400" : "text-slate-400"}`} size={22} />
-      <FaFire className={`pr-1 ${favourites > 3 ? "text-red-400" : "text-slate-400"}`} size={22} />
-      <FaFire className={`pr-1 ${favourites > 4 ? "text-red-400" : "text-slate-400"}`} size={22} />
+      {Array.from({ length: maxFavourites }, (_, index) => (
+        <FaFire
+          key={index}
+          className={`pr-1 ${index < favourites ? "text-red-400" : "text-slate-400"}`}
+          size={22}
+        />
+      ))}
     </div>
   );
 };

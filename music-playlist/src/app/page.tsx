@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
     return parts[0];
   };
 
-  const uniqueGenres = Array.from(new Set(musicPlaylists?.map(({ genre }) => extractFirstGenre(genre))) || []).sort();
+  const uniqueGenres = Array.from(new Set(musicPlaylists?.map(({ genre }) => extractFirstGenre(genre.toLowerCase())) || [])).sort();
 
   return (
     <div className="p-5">
@@ -57,7 +57,8 @@ const Dashboard: React.FC = () => {
             <h2 style={{ fontFamily: 'Rock Salt', fontSize: '30px', color: 'orange' }}>{uniqueGenre}</h2>
             <div className="lg:grid grid-cols-2 xl:grid-cols-4">
               {musicPlaylists
-                .filter((musicPlaylist) => extractFirstGenre(musicPlaylist.genre) === uniqueGenre)
+                .filter((musicPlaylist) => extractFirstGenre(musicPlaylist.genre.toLowerCase()) === uniqueGenre)
+                .sort((a, b) => b.favorites - a.favorites) 
                 .map((filteredMusicPlaylist, index) => (
                   <Card
                     key={index}
