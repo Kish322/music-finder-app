@@ -61,34 +61,36 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
   }, [MusicPlaylist.title]);
 
   return (
-    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white rounded-md shadow-lg p-3 m-4 sm:max-w-sm md:max-w-sm lg:max-w-sm">
-      <div className="flex mb-2">
-        <FavouritesDisplay favourites={MusicPlaylist.favorites} />
-        <div className="ml-auto"></div>
-        <DeleteCard id={MusicPlaylist._id} />
+    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white rounded-md shadow-lg p-3 m-4 sm:max-w-sm md:max-w-sm lg:max-w-sm flex flex-col justify-between transition duration-300 ease-in-out transform hover:scale-105 hover:from-purple-800 hover:to-indigo-800">
+      <div className="mb-2">
+        <div className="flex">
+          <FavouritesDisplay favourites={MusicPlaylist.favorites} />
+          <div className="ml-auto">
+            <DeleteCard id={MusicPlaylist._id} />
+          </div>
+        </div>
+        <h3 className="text-center" style={{ fontFamily: "Permanent Marker", fontSize: "27px" }}>
+          {MusicPlaylist.title}
+        </h3>
+        {albumInfo && (
+          <img
+            src={albumInfo.imageUrl}
+            alt={albumInfo.name}
+            className="mx-auto w-full h-auto mb-2"
+            style={{ maxWidth: "220px", maxHeight: "150px" }}
+          />
+        )}
+        <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
+          Album: {MusicPlaylist.album}
+        </p>
+        <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
+          Artist: {MusicPlaylist.artist}
+        </p>
+        <hr className="my-1 h-0.5 border-0 bg-red-400" />
+        <p className="whitespace-pre-wrap" style={{ fontFamily: "Salsa", fontSize: "17px" }}>
+          Notes: {MusicPlaylist.notes}
+        </p>
       </div>
-      <h3 className="text-center" style={{ fontFamily: "Permanent Marker", fontSize: "27px" }}>
-        {MusicPlaylist.title}
-      </h3>
-      {albumInfo && (
-        <img
-          src={albumInfo.imageUrl}
-          alt={albumInfo.name}
-          className="mx-auto w-full h-auto mb-2"
-          style={{ maxWidth: "220px", maxHeight: "150px" }}
-        />
-      )}
-      <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
-        Album: {MusicPlaylist.album}
-      </p>
-      <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
-        Artist: {MusicPlaylist.artist}
-      </p>
-      <hr className="my-1 h-0.5 border-0 bg-red-400" />
-      <p className="whitespace-pre-wrap" style={{ fontFamily: "Salsa", fontSize: "17px" }}>
-        Notes: {MusicPlaylist.notes}
-      </p>
-      <div className="flex-grow"></div>
       <div className="flex mt-2">
         <div className="flex flex-col mt-auto">
           <p className="text-xs transform translate-y-3">
@@ -103,7 +105,6 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
             })}
           </p>
         </div>
-        <div className="ml-auto flex items-end"></div>
       </div>
     </div>
   );
