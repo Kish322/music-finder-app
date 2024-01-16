@@ -3,7 +3,7 @@ import FavouritesDisplay from "../favoritesDisplay/favoritesDisplay";
 import DeleteCard from "../deleteCard/deleteCard";
 
 interface MusicPlaylist {
-  id: number;
+  _id: number;
   genre: string;
   title: string;
   notes: string;
@@ -61,11 +61,11 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
   }, [MusicPlaylist.title]);
 
   return (
-    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white flex flex-col hover:bg-card-hover rounded-md shadow-lg p-3 m-4">
+    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white rounded-md shadow-lg p-3 m-4 sm:max-w-sm md:max-w-sm lg:max-w-sm">
       <div className="flex mb-2">
         <FavouritesDisplay favourites={MusicPlaylist.favorites} />
         <div className="ml-auto"></div>
-        <DeleteCard />
+        <DeleteCard id={MusicPlaylist._id} />
       </div>
       <h3 className="text-center" style={{ fontFamily: "Permanent Marker", fontSize: "27px" }}>
         {MusicPlaylist.title}
@@ -84,13 +84,13 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
       <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
         Artist: {MusicPlaylist.artist}
       </p>
-      <hr className="my-2 h-0.5 border-0 bg-page" />
+      <hr className="my-1 h-0.5 border-0 bg-red-400" />
       <p className="whitespace-pre-wrap" style={{ fontFamily: "Salsa", fontSize: "17px" }}>
         Notes: {MusicPlaylist.notes}
       </p>
       <div className="flex-grow"></div>
       <div className="flex mt-2">
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-auto">
           <p className="text-xs transform translate-y-3">
             Created: {' '}
             {new Date(MusicPlaylist.createdAt).toLocaleString('en-US', {

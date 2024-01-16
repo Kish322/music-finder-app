@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Card from '@/app/components/card/card';
 
 interface MusicPlaylist {
-  id: number;
+  _id: number;
   genre: string;
   favorites: number;
   title: string;
@@ -50,7 +50,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="p-5">
-      <h1 className="text-center text-2xl font-bold mb-4" style={{ fontFamily: 'Rock Salt', fontSize: '35px', color: 'green' }}>My Music Collection</h1>
+      <h1 className="text-center text-2xl font-bold mb-4" style={{ fontFamily: 'Rock Salt', fontSize: '35px', color: 'green' }}>My Music Library</h1>
       <div>
         {musicPlaylists && uniqueGenres?.map((uniqueGenre, genreIndex) => (
           <div key={genreIndex} className="mb-4">

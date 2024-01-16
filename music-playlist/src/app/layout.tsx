@@ -2,10 +2,7 @@ import React, { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Nav from '@/app/components/nav/nav';
-import { config } from '@fortawesome/fontawesome-svg-core';
-import '@fortawesome/fontawesome-svg-core/styles.css';
 
-config.autoAddCss = false;
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {

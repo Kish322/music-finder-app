@@ -211,7 +211,7 @@ const MusicForm: React.FC = () => {
           <input
             type="submit"
             className="btn"
-            value="Create Playlist"
+            value="Add to Music Library"
             style={{ width: '275px', marginTop: '20px' }} 
           />
         </div>
