@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
       });
       return res.json();
     } catch (error) {
-      console.log("Failed to get music playlist", error);
+      console.log("Failed to get music", error);
       throw error;
     }
   };
@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
       const { music } = await getMusicPlaylist();
       setMusicPlaylists(music || []);
     } catch (error) {
-      console.error("Error in fetching music playlist:", error);
+      console.error("Error in fetching music", error);
     }
   };
 
@@ -50,11 +50,11 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="p-5">
-      <h1 className="text-center text-2xl font-bold mb-4" style={{ fontFamily: 'Rock Salt', fontSize: '35px', color: 'green' }}>My Music Library</h1>
+      <h1 className="text-center text-2xl font-bold mb-4" style={{ fontFamily: 'Rock Salt', fontSize: '37px', color: 'green' }}>My Music Library</h1>
       <div>
         {musicPlaylists && uniqueGenres?.map((uniqueGenre, genreIndex) => (
           <div key={genreIndex} className="mb-4">
-            <h2 style={{ fontFamily: 'Rock Salt', fontSize: '30px', color: 'orange' }}>{uniqueGenre}</h2>
+            <h2 style={{ fontFamily: 'Rock Salt', fontSize: '32px', color: 'orange' }}>{uniqueGenre}</h2>
             <div className="lg:grid grid-cols-2 xl:grid-cols-4">
               {musicPlaylists
                 .filter((musicPlaylist) => extractFirstGenre(musicPlaylist.genre.toLowerCase()) === uniqueGenre)

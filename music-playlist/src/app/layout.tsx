@@ -6,7 +6,7 @@ import Nav from '@/app/components/nav/nav';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Music Playlist App',
+  title: 'Mystique',
   description: 'Listen to music!',
 };
 
