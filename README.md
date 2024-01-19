@@ -2,7 +2,7 @@
 
 # Introduction 
 
-Mystique is an interactive music-finder website to help personalize one's taste of music on Spotify. It allows users to select and choose songs on the search bar, which provides them a preview to the track if available. Moreover, the user can additionally put a favorite rating and notes to the track of choice before adding it to the music library. Finally, the user has the option to delete and edit the track of choice. Enjoy! 
+Mystique is an interactive music-finder website to help personalize one's taste of music on Spotify. It allow users to select and choose songs on the search bar, which provides them a preview to the track if available. Moreover, the user can additionally put a favorite rating and notes to the track of choice before adding it to the music library. Finally, the user has the option to delete and edit the track of choice. Enjoy! 
 
 # Technologies Used 
 The following technologies were used to create this application: 
