@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import MusicPlayerBar from "../musicPlayerBar/musicPlayerBar";
+import Image from 'next/image';
 import { FaSpotify } from "react-icons/fa";
 import { ImCancelCircle } from "react-icons/im";
 import { IoIosSearch } from "react-icons/io";
@@ -240,10 +241,12 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({
             onClick={() => handleTrackClick(track)}
           >
             <strong className="block mb-3 text-white">{track.name}</strong>
-            <img
+            <Image
               src={track.album.images[0]?.url}
               alt={`${track.name} Poster`}
-              className="w-full h-auto rounded"
+              width={100} 
+              height={200} 
+              className="rounded"
             />
             <div className="mt-2 text-center text-white">
               <p className="mb-1">Artist: {track.artists.map((artist) => artist.name).join(", ")}</p>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Card from '@/app/components/card/card';
 
 interface MusicPlaylist {
@@ -28,18 +28,18 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const { music } = await getMusicPlaylist();
-      setMusicPlaylists(music || []);
-    } catch (error) {
-      console.error("Error in fetching music", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { music } = await getMusicPlaylist();
+        setMusicPlaylists(music || []);
+      } catch (error) {
+        console.error("Error in fetching music", error);
+      }
+    };
+
     fetchData();
-  }, []);
+  }, []); // Empty dependency array to run the effect only once on mount
 
   const extractFirstGenre = (fullGenre: string): string => {
     const parts = fullGenre.split(', ');
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
             <div className="lg:grid grid-cols-2 xl:grid-cols-4">
               {musicPlaylists
                 .filter((musicPlaylist) => extractFirstGenre(musicPlaylist.genre.toLowerCase()) === uniqueGenre)
-                .sort((a, b) => b.favorites - a.favorites) 
+                .sort((a, b) => b.favorites - a.favorites)
                 .map((filteredMusicPlaylist, index) => (
                   <Card
                     key={index}

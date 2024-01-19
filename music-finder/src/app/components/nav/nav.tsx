@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from 'next/image';
 import { FaHome } from "react-icons/fa";
 import { SlPlaylist } from "react-icons/sl";
 
@@ -8,10 +9,13 @@ const Nav = () => {
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
           <div className="logo-container h-7">
-            <img
+            <Image
               src="/piano.png"
               alt="Mystique"
-              className="h-12 object-contain transform -translate-y-3"
+              width={48} 
+              height={48} 
+              objectFit="contain"
+              className="transform -translate-y-3"
             />
           </div>
           <p className="text-white font-bold text-lg" style={{ fontFamily: 'eczar', fontSize: '28px'}}>Mystique</p>

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Image from 'next/image';
 import FavouritesDisplay from "../favoritesDisplay/favoritesDisplay";
 import DeleteCard from "../deleteCard/deleteCard";
 import EditCard from "../editCard/editCard";
+
 
 interface MusicPlaylist {
   _id: number;
@@ -62,7 +64,7 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
   }, [MusicPlaylist.title]);
 
   return (
-    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white rounded-md shadow-lg p-3 m-4 sm:max-w-sm md:max-w-sm lg:max-w-sm flex flex-col justify-between transition duration-300 ease-in-out transform hover:scale-105 hover:from-purple-800 hover:to-indigo-800">
+    <div className="bg-gradient-to-r from-indigo-800 via-purple-600 to-purple-800 text-white rounded-md shadow-lg p-3 m-4 sm:max-w-xs md:max-w-xs lg:max-w-xs flex flex-col justify-between transition duration-300 ease-in-out transform hover:scale-105 hover:from-purple-800 hover:to-indigo-800">
       <div className="flex mb-2">
         <FavouritesDisplay favourites={MusicPlaylist.favorites} />
         <div className="ml-auto"></div>
@@ -74,12 +76,14 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
         {MusicPlaylist.title}
       </h3>
       {albumInfo && (
-        <img
-          src={albumInfo.imageUrl}
-          alt={albumInfo.name}
-          className="mx-auto w-full h-auto mb-2"
-          style={{ maxWidth: "220px", maxHeight: "150px" }}
-        />
+        <div className="mx-auto w-full h-auto mb-2 flex justify-center items-center">
+          <Image
+            src={albumInfo.imageUrl}
+            alt={albumInfo.name}
+            width={180}
+            height={1}
+          />
+        </div>
       )}
       <p className="text-center" style={{ fontFamily: "Sriracha", fontSize: "19px" }}>
         Album: {MusicPlaylist.album}
