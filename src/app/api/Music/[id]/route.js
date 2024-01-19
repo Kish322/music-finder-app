@@ -1,7 +1,6 @@
 import Music from "@/app/models/Music";
 import { NextResponse } from "next/server";
 
-// delete the card 
 export async function DELETE(req, { params }) {
   try{
     const { id } = params; 
@@ -12,7 +11,6 @@ export async function DELETE(req, { params }) {
   }
 }
 
-// fetch the fields of the card id while edit mode 
 export async function GET(req, { params }) {
   try {
     const { id } = params; 
@@ -32,9 +30,9 @@ export async function PUT(req, { params }) {
     const musicData = body.formData;
 
     const updatedMusic = await Music.findOneAndUpdate(
-      { _id: id }, // Query
-      { $set: musicData }, // Update
-      { new: true } // Options to return the updated document
+      { _id: id }, 
+      { $set: musicData }, 
+      { new: true } 
     );
     return NextResponse.json({ message: 'Music updated', updatedMusic }, { status: 200 });
   } catch (error) {

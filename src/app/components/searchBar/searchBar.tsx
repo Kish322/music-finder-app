@@ -76,7 +76,8 @@ const SpotifySearchBar: React.FC<SpotifySearchBarProps> = ({
   useEffect(() => {
     const searchSpotify = async () => {
       if (!accessToken || query.trim() === "") {
-        setSearchResults([]); // Clear search results when the query is empty
+        // Clear search results when the query is empty
+        setSearchResults([]);
         return;
       }
 

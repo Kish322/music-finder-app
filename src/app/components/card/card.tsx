@@ -52,7 +52,8 @@ const Card: React.FC<CardProps> = ({ MusicPlaylist }) => {
         const trackData = await trackResponse.json();
         if (trackData.tracks?.items.length > 0) {
           const albumName = trackData.tracks.items[0].album.name;
-          const imageUrl = trackData.tracks.items[0].album.images[0]?.url; // Assuming the first image in the array is the album cover
+           // Assuming the first image in the array is the album cover
+          const imageUrl = trackData.tracks.items[0].album.images[0]?.url; 
           setAlbumInfo({ name: albumName, imageUrl });
         }
       } catch (error) {

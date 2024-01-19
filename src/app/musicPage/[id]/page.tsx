@@ -1,4 +1,3 @@
-// Import necessary libraries and components
 "use client";
 import React, { useState, useEffect } from 'react';
 
@@ -41,16 +40,13 @@ const MusicPage: NextPage<MusicPageProps> = ({ params }) => {
       const data = await response.json();
       if (response.ok) {
         setMusicData(data.updatedMusic);
-        // Optionally, you can provide user feedback on successful update
         console.log('Music updated successfully');
-      } else {
-        console.error('Error updating music:', data.message);
-      }
-    } catch (error) {
+      } 
+    } 
+    catch (error) {
       console.error('Error updating music:', error);
     }
   };
-
   return <MusicForm musicData={musicData} onUpdate={handleUpdate} />;
 };
 

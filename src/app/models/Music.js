@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.Promise = global.Promise;
 
-// Define the schema for the 'music' collection
+// Define the schema for the music collection
 const musicSchema = new Schema(
   {
     title: String,

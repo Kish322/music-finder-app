@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@/app/components/card/card';
 
 interface MusicPlaylist {
@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
     };
 
     fetchData();
-  }, []); // Empty dependency array to run the effect only once on mount
+  }, []); 
 
   const extractFirstGenre = (fullGenre: string): string => {
     const parts = fullGenre.split(', ');
